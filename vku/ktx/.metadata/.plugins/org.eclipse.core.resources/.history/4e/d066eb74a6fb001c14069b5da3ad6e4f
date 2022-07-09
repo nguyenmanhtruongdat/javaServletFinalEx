@@ -1,0 +1,218 @@
+package Controller;
+
+import java.awt.Taskbar.State;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.mysql.cj.jdbc.Blob;
+
+import DAO.DAO;
+
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.sql.ResultSet;
+import DBConnect.DBContext;
+import entity.detailsRoom;
+import entity.room;
+import entity.student;
+
+/**
+ * Servlet implementation class searchSV
+ */
+@WebServlet("/searchSV")
+public class searchSV extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    Connection conn;
+    ResultSet rs;
+    Statement stmt;
+    java.sql.Blob image = null;
+    Connection con = null;
+    byte[ ] imgData = null ;
+
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public searchSV() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        //String masv=msv.getMasv();
+        String masvsearch = request.getParameter("masv");
+        DBContext db = DBContext.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MNM/YYYY");
+        try {
+            conn = db.getConnection();
+            
+            response.setContentType("image/jpg");
+            DAO dao = new DAO();
+            stmt = conn.createStatement();
+            String sql = "SELECT DISTINCT studentinfor.masv, studentinfor.hoten, studentinfor.anh, room.tiendien, studentinfor.lop, studentinfor.truong, studentinfor.ngaysinh, studentinfor.gioitinh, studentinfor.nganh, thongtino.maphong, thongtino.ngayvao, thongtino.ngayra FROM `studentinfor` , `thongtino`, `room` WHERE studentinfor.masv='"+masvsearch+"' and studentinfor.masv=thongtino.masv and  room.maphong=thongtino.maphong";
+            rs = stmt.executeQuery(sql);
+            String masv = "";
+            String hoten = "";
+            String anh = "";
+            String ngaysinh = "";
+            String gioitinh = "";
+            String lop = "";
+            String nganh = "";
+            String truong = "";
+String maphong ="";
+String ngayvao ="";
+String ngayra ="";
+double tiendien =0;
+            while (rs.next()) {
+                masv = rs.getString("masv");
+                anh = rs.getString("anh");
+                hoten = rs.getString("hoten");
+                ngaysinh = rs.getString("ngaysinh");
+                String dob = df.format(new Date(ngaysinh));
+                gioitinh = rs.getString("gioitinh");
+                nganh = rs.getString("nganh");
+                truong = rs.getString("truong");
+                lop = rs.getString("lop");
+                maphong = rs.getString("maphong");
+                ngayvao = rs.getString("ngayvao");
+                ngayra= rs.getString("ngayra");
+                tiendien = rs.getDouble("tiendien");
+            }
+            List<detailsRoom> list = new ArrayList<>();
+            list.add(new detailsRoom(maphong));
+            request.setAttribute("listR", list);
+            //request.getRequestDispatcher("admin.jsp").forward(request, response);
+//            student std = new student();
+//            std.setMasv(masv);
+//            std.setTen(hoten);
+//            std.setNgaysinh(ngaysinh);
+//            std.setGioitinh(gioitinh);
+//            std.setLop(lop);
+//            std.setNganh(nganh);
+//            std.setTruong(truong);
+//            std.setCMND(cmnd);
+//            std.setSdtCanhan(sdtSV);
+//            std.setSdtGiadinh(sdtPH);
+//            std.setDiachi(diachi);
+//            std.setEmail(email);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/YYYY");  
+            LocalDateTime now = LocalDateTime.now();  
+boolean stt= (masvsearch.trim().toLowerCase().equals(masv.trim().toLowerCase()));
+            if (!stt) {
+                out.print("<div class=\"cc\" id=\"cc\">\n"
+                        + "	<div class=\"col-xs-9 col-sm-9 col-md-10 col-lg-10\" style=\"position:relative;\">\n"
+                        + "		<p style=\"font-weight:normal; line-height:20px\">\n"
+                        + "					<b>Không tìm thấy sinh viên!</b></p>\n"
+                        +"<p>Vui lòng kiểm tra lại mã sinh viên hoặc thực hiện đăng ký thông tin cá nhân <a href=\"register-infor-student.jsp\">Tại đây</a></p>"
+                        + "	</div>\n"
+                        + "</div>");
+            } else if(stt) {
+//                o.write(imgData);
+//                o.flush();
+//                o.close();
+                out.print("<div class=\"page_sub_header cfix row\">\n"
+                        + "    <div class=\"col-xs-3 col-sm-3 col-md-2 col-lg-2\" style=\"position:relative;\">\n"
+                		//+"<a href=\"#\" onclick=\"viewImg()\">Xem ảnh</a>"
+                        + "				<img src=\"" + anh + "\" class=\"img-thumbnail\">\n"
+                        + "		</div>\n"
+                        + "	\n"
+                        + "	<div class=\"col-xs-9 col-sm-9 col-md-10 col-lg-10\" style=\"position:relative;\">\n"
+                        + "		<p style=\"font-weight:normal; line-height:20px\">\n"
+                        + "					<b>Mã sinh viên:</b>" + masv + "<br>\n"
+                        + "			<b>Họ và tên:</b>" + hoten + "<br>\n"
+                        + "			<b>Ngày sinh </b>" + ngaysinh + "<br>\n"
+                        + "			<b>Giới tính:</b>" + gioitinh + "<br>\n"
+                        + "		Lớp:" + lop + "<br>Ngành:" + nganh + "<br></p>\n"	
+                        + "	</div>\n"
+                        + "</div>");  
+                out.print("<fieldset>\r\n"
+                		+ "	\r\n"
+                		+ "			<h4>Thông tin phòng ở:</h4>\r\n"
+                		+ "		<div id=\"list_debt_roomfee2\" class=\"table-responsive\">\r\n"
+                		+ "			<table class=\"table table-bordered table-striped table-hover\">\r\n"
+                		+ "				<thead>\r\n"
+                		+ "					<tr>\r\n"
+                		+ "						<th class=\"text-center\">\r\n"
+                		+ "							Phòng\r\n"
+                		+ "						</th>\r\n"
+                		+ "						<th class=\"text-center\">\r\n"
+                		+ "							Tháng\r\n"
+                		+ "						</th>\r\n"
+                		+ "						<th class=\"text-center\">\r\n"
+                		+ "							Tổng tiền\r\n"
+                		+ "						</th>\r\n"
+                		+ "					</tr>\r\n"
+                		+ "				</thead>\r\n"
+                		+ "			\r\n"
+                		+ "				<tbody>\r\n"
+                		+ "									<tr>\r\n"
+                		+ "						<td>\r\n"
+                		+"<h3 style=\"font-size:revert\"><a href=\"#\" id=\"room\" data-toggle=\"modal\" data-target=\"#modalRoomInfor\" onclick=\"showRoomDetail()\">"+maphong+"</a></h3>"
+                		+ "						</td>\r\n"
+                		+ "						<td>\r\n"
+                		+ "							"+dtf.format(now)+"					</td>\r\n"
+                		+ "						<td>\r\n"
+                		+ "							"+tiendien+"&nbsp;₫						</td>\r\n"
+                		+ "					</tr>\r\n"
+                		+ "								</tbody>\r\n"
+                		+ "			</table>\r\n"
+                		+ "		</div>\r\n"
+                		+ "	\r\n"
+                		+ "	\r\n"
+                		+ "			\r\n"
+                		+ "		<!-- <div class=\"table-responsive\">\r\n"
+                		+ "			<table class=\"table table-bordered table-striped table-hover\">\r\n"
+                		+ "				<thead>\r\n"
+                		+ "					<tr>\r\n"
+                		+ "						<th class=\"text-center\" colspan=\"3\">\r\n"
+                		+ "							Tổng cộng\r\n"
+                		+ "						</th>\r\n"
+                		+ "						<th class=\"text-center\">\r\n"
+                		+ "							0&nbsp;₫						</th>\r\n"
+                		+ "						<th class=\"text-center\">\r\n"
+                		+ "							0&nbsp;₫						</th>\r\n"
+                		+ "						<th class=\"text-center\">\r\n"
+                		+ "							0&nbsp;₫						</th>\r\n"
+                		+ "					</tr>\r\n"
+                		+ "				</thead>\r\n"
+                		+ "			</table>\r\n"
+                		+ "		</div> -->\r\n"
+                		+ "		\r\n"
+                		+ "	</fieldset>");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	}
+
+}

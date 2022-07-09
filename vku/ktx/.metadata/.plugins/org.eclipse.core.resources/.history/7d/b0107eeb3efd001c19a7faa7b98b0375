@@ -1,0 +1,388 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+<link rel="icon" type="image/x-icon" href="./favicons/favicon.ico">
+<link rel="./faviconsapple-touch-icon" sizes="180x180"
+	href="./favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32"
+	href="./favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16"
+	href="./favicons/favicon-16x16.png">
+<style><%@ include file ="/WEB-INF/style.css"%></style>
+<title>Đăng ký thông tin cá nhân</title>
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<style>
+.btn-default {
+	color: #ffffff;
+	background-color: #a7a9aa;
+	border-color: #a7a9aa;
+}
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+      $(function () {
+        $("#datepicker").datepicker({
+          dateFormat: "dd/mm/yy",
+        });
+      });
+    </script>
+</head>
+<body>
+	<div class="preloading">
+		<img src="gif/pre-loader.gif" alt=""
+			style="width: 80px !important; height: auto;">
+	</div>
+	<!-- nav starts  -->
+
+	<nav class="navbar navbar-expand-lg navbar-light sticky-top"
+		style="background-color: #0F2557;">
+		<a class="navbar-brand" href="index.jsp"><img src="images/vku.png"
+			alt="" width="66px" height="35px"></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarColor03" aria-controls="navbarColor03"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarColor03">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a class="nav-link" href="index.jsp">Trang
+						chủ</a></li>
+				<c:if test="${sessionScope.acc.isUser==1}">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Đăng
+							ký</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="register-live.jsp">Đăng ký ở
+								nội trú</a> <a class="dropdown-item"
+								href="register-infor-student.jsp">Đăng ký thông tin cá nhân</a>
+						</div></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc.isAdmin==1}">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Quản
+							lý</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="quanlySV">Quản lý sinh viên</a> <a
+								class="dropdown-item" href="quanlyPhong">Quản lý phòng</a> <a
+								class="dropdown-item" href="quanlyAcc">Quản lý tài khoản</a>
+						</div></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc.isUser==1}">
+
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Cập
+							nhật thông tin</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="editLiver.jsp">Cập nhật thông
+								tin ở nội trú</a> <a class="dropdown-item" href="editInfor.jsp">Cập
+								nhật thông tin các nhân</a>
+						</div></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc.isAdmin==1}">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Thông
+							báo</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="">Duyệt đăng ký phòng</a> <a
+								class="dropdown-item" href="">Liên lạc sinh viên, phụ huynh</a>
+							<a class="dropdown-item" href="">Thông báo nộp tiền</a> <a
+								class="dropdown-item" href="">Thông báo hết hạn</a>
+						</div></li>
+				</c:if>
+				
+				<c:if test="${sessionScope.acc.isAdmin==1}">
+					<li class="nav-item"><a class="nav-link" href="dashboard.jsp">Đến trang quản lý</a></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc.isUser==1}">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Biểu
+							mẫu</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="file1.jsp">Đơn đăng ký ở
+								nội trú</a> <a class="dropdown-item" href="file2.jsp">Hợp
+								đồng</a> <a class="dropdown-item" href="file3.jsp">Quy định</a>
+						</div></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc!=null}">
+					<li class="nav-item"><a class="nav-link" href="#">Xin
+							chào ${sessionScope.acc.username} !</a></li>
+				</c:if>
+
+			</ul>
+			<c:if test="${sessionScope.acc==null}">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="login.jsp"><i
+							class="fa-solid fa-right-to-bracket"></i>Đăng nhập</a></li>
+				</ul>
+			</c:if>
+			<c:if test="${sessionScope.acc!=null}">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="logout"><i
+							class="fa-solid fa-right-to-bracket"></i>Đăng xuất</a></li>
+				</ul>
+			</c:if>
+		</div>
+	</nav>
+	<!-- nav end -->
+
+	<div class="center" style="margin: 20 auto; width: 100%">
+		<form action="./execSignup" method="post"
+			enctype="multipart/form-data">
+			<div class="container">
+				<div class="text-center mt-5">
+					<h2>Đăng ký thông tin cá nhân</h2>
+					<hr>
+				</div>
+
+				<div class="row">
+					<div class="col-lg-12 mx-auto">
+						<div class="card mt-2 mx-auto p-4" style="border: none">
+							<div class="card-body">
+								<div class="container">
+									<div class="controls">
+										<h5>I. Thông tin cá nhân</h5>
+										<hr>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="masv">Mã sinh viên <span><span>*</span></span>
+													</label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" name="masv" class="form-control"
+														id="masv" required />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="hoten">Họ tên <span><span>*</span></span>
+													</label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" id="hoten" class="form-control"
+														name="hoten" required />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="img">Ảnh <span><span>*</span></span>
+													</label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="file" id="img" name="img" accept="image/*" />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="ngaysinh">Ngày sinh <span>*</span>
+													</label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" readonly="readonly" name="dob"
+														placeholder="dd-mm-yyyy" class="form-control"
+														id="datepicker" onclick="datepicker()" />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="gioitinh">Giới tính <span>*</span>
+													</label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group" style="display: flex;">
+														<label for="nam">Nam </label> <input type="radio" id="nam" name="gioitinh" value="1" required="required" class="form-control"
+															id="gioitinh">
+														<label for="nu">Nữ </label> <input type="radio" id="nu" name="gioitinh" value="0" required="required" class="form-control"
+															id="gioitinh">
+												</div>
+											</div>
+										</div>
+										<h5>II. Thông tin trường học</h5>
+										<hr>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="lop">Lớp <span>*</span></label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" name="lop" id="lop" class="form-control"
+														required="required" />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="nganh">Ngành <span>*</span></label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" name="nganh" class="form-control"
+														id="nganh" required="required" />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="khoa">Khoa <span>*</span></label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" name="khoa" class="form-control"
+														id="khoa" required="required" />
+												</div>
+											</div>
+										</div>
+										<h5>III. Thông tin liên hệ</h5>
+										<hr>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="cmnd">CMND/CCCD <span>*</span></label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" name="cmnd" class="form-control"
+														id="cmnd" required="required" />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="truong">Trường <span>*</span></label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" name="truong" class="form-control"
+														id="truong" required="required" />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="sdt">Số điện thoại cá nhân <span>*</span>
+													</label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" name="sdtSV" class="form-control"
+														id="sdt" required="required" />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="sdt">Số điện thoại gia đình <span>*</span>
+													</label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" name="sdtPH" class="form-control"
+														id="sdt" required="required" />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="email">Email <span>*</span></label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="email" name="email" class="form-control"
+														id="email" required="required" />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="diachi">Địa chỉ <span>*</span></label>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="form-group">
+													<input type="text" name="diachi" class="form-control"
+														id="diachi" required="required" />
+												</div>
+											</div>
+										</div>
+										<h5>Xác nhận</h5>
+										<hr>
+										<div class="row">
+											<div class="col-md-2"></div>
+											<div class="col-md-10">
+												<button type="submit" class="btn btn-success">
+													<i class="fa-solid fa-circle-check"></i> Đăng ký
+												</button>
+												<button type="reset" class="btn btn-default">
+													<i class="fa-solid fa-rotate-right"></i> Viết lại
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /.8 -->
+					</div>
+					<!-- /.row-->
+				</div>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

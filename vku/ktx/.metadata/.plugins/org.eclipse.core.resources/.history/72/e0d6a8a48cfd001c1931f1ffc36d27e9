@@ -1,0 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>&lt;fmt:setLocale&gt; Demo</title>
+  </head>
+  <body>
+    <h1>&lt;fmt:setLocale&gt; Demo</h1>
+    <fmt:setLocale value="fr_CA"/>
+    <fmt:bundle basename="net.codejava.jstl.messages">
+       <fmt:message key="count.one"/><br/>
+       <fmt:message key="count.two"/><br/>
+       <fmt:message key="count.three"/><br/>
+    </fmt:bundle>
+  </body>
+</html>

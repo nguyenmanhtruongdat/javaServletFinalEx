@@ -1,0 +1,163 @@
+package Controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import DAO.DAO;
+import DBConnect.DBContext;
+
+/**
+ * Servlet implementation class layDSCanDuyetPhong
+ */
+@WebServlet("/layDSCanDuyetPhong")
+public class layDSCanDuyetPhong extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    Connection conn;
+    ResultSet rs;
+    ResultSet rs1;
+    Statement stmt;
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public layDSCanDuyetPhong() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        //String masv=msv.getMasv();
+        String masvsearch = request.getParameter("masv");
+        DBContext db = DBContext.getInstance();
+        String masv ="";
+        String hoten="";
+        String ngaysinh="";
+        String sdtSV="";
+        String email="";
+        String maphong="";
+        try {
+            conn = db.getConnection();
+            DAO dao = new DAO();
+            rs = dao.dsCanDuyetPhong(masvsearch);
+            
+            out.print("<fieldset>\r\n"
+            		+ "	\r\n"
+            		+"<h3><i class=\"fa-solid fa-building\"></i> Mã sinh viên "+masv+"</h3>"
+            		+ "		<div id=\"list_debt_roomfee2\" class=\"table-responsive\">\r\n"
+            		+ "			<table class=\"table table-bordered table-striped table-hover\">\r\n"
+            		+ "				<thead>\r\n"
+            		+ "					<tr>\r\n"
+            		+ "						<th class=\"text-center\">\r\n"
+            		+ "							Họ và tên\r\n"
+            		+ "						</th>\r\n"
+            		+ "						<th class=\"text-center\">\r\n"
+            		+ "							Ngày sinh\r\n"
+            		+ "						</th>\r\n"
+            		+ "						<th class=\"text-center\">\r\n"
+            		+ "							Số điện thoại\r\n"
+            		+ "						</th>\r\n"
+//            		+ "						<th class=\"text-center\">\r\n"
+//            		+ "							Ngày sinh\r\n"
+//            		+ "						</th>\r\n"
+            		+ "						<th class=\"text-center\">\r\n"
+            		+ "							Ngày vào\r\n"
+            		+ "						</th>\r\n"
+            		+ "						<th class=\"text-center\">\r\n"
+            		+ "							Ngày ra\r\n"
+            		+ "						</th>\r\n"
+            		+ "						<th class=\"text-center\">\r\n"
+            		+ "							Email\r\n"
+            		+ "						</th>\r\n"
+            		+ "						<th class=\"text-center\">\r\n"
+            		+ "							Mã phòng đăng ký\r\n"
+            		+ "						</th>\r\n"
+            		
+            		+ "					</tr>\r\n"
+            		+ "				</thead>\r\n"
+            		+ "			\r\n"
+            		+ "				<tbody>\r\n");
+            
+            while (rs.next()) {
+				masv=rs.getString("masv");
+				hoten=rs.getString("hoten");
+				ngaysinh=rs.getString("ngaysinh");
+				sdtSV=rs.getString("sdtSV");
+				email = rs.getString("email");
+				maphong = rs.getString("maphong");		
+				
+            	out.print("									<tr>\r\n"
+                		+ "						<td>\r\n"
+                		+hoten
+                		+ "						</td>\r\n"
+                		+ "						<td>\r\n"
+                		+ "							"+hoten+"					</td>\r\n"
+                		+ "						<td>\r\n"
+                		 + "				<img src=\"" + anh + "\" class=\"img-thumbnail\">\n"
+//                		+ "						<td>\r\n"
+//                		+ "							"+ngaysinh+"						</td>\r\n"
+                		            		+ "						<td>\r\n"
+                		+ "							"+ngayvao+"						</td>\r\n"
+                		            		+ "						<td>\r\n"
+                		+ "							"+ngayra+"						</td>\r\n"
+                		            		            		+ "						<td>\r\n"
+                		+ "							"+l+"						</td>\r\n"
+                		            		            		+ "						<td>\r\n"
+                		+ "							"+Math.round(sotien * 1000.0) / 1000.0+" đ						</td>\r\n"
+                		+ "					</tr>\r\n");
+        		out.print("								</tbody>\r\n"
+        		+ "			</table>\r\n"
+        		+ "		</div>\r\n"
+        		+ "	\r\n"
+        		+ "	\r\n"
+        		+ "			\r\n"
+        		+ "		<!-- <div class=\"table-responsive\">\r\n"
+        		+ "			<table class=\"table table-bordered table-striped table-hover\">\r\n"
+        		+ "				<thead>\r\n"
+        		+ "					<tr>\r\n"
+        		+ "						<th class=\"text-center\" colspan=\"3\">\r\n"
+        		+ "							Tổng cộng\r\n"
+        		+ "						</th>\r\n"
+        		+ "						<th class=\"text-center\">\r\n"
+        		+ "							0&nbsp;₫						</th>\r\n"
+        		+ "						<th class=\"text-center\">\r\n"
+        		+ "							0&nbsp;₫						</th>\r\n"
+        		+ "						<th class=\"text-center\">\r\n"
+        		+ "							0&nbsp;₫						</th>\r\n"
+        		+ "					</tr>\r\n"
+        		+ "				</thead>\r\n"
+        		+ "			</table>\r\n"
+        		+ "		</div> -->\r\n"
+        		+ "		\r\n"
+        		+ "	</fieldset>");
+			}
+            
+            
+        }catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}

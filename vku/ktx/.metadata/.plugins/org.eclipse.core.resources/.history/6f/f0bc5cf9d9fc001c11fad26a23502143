@@ -1,0 +1,198 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<link rel="icon" type="image/x-icon" href="./favicons/favicon.ico">
+<link rel="./faviconsapple-touch-icon" sizes="180x180"
+	href="./favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32"
+	href="./favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16"
+	href="./favicons/favicon-16x16.png">
+<style><%@ include file ="/WEB-INF/style.css"%></style>
+<title>Trang chủ</title>
+</head>
+<body>
+	<div class="preloading">
+		<img src="gif/pre-loader.gif" alt=""
+			style="width: 80px !important; height: auto;">
+	</div>
+	<jsp:include page=""></jsp:include>
+
+	<div class="site_content">
+		<div class="container">
+
+			<div class="row">
+				<section class="col-md-12" id="searchDiv">
+					<div class="page_header cfix" id="page_header">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<h3>Tra cứu thông tin sinh viên</h3>
+						</div>
+						<div class="container">
+							<div class="form-group">
+								<div class="col-xs-11 col-sm-4 col-md-4 col-lg-3">
+									<input class="form-control" name="masv" id="masv"
+										placeholder="Mã sinh viên" autocomplete="off"
+										required="required" autofocus="1" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-11 col-sm-4 col-md-4 col-lg-3">
+									<button class="btn btn-primary" id="search">
+										<i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+									</button>
+								</div>
+
+							</div>
+
+						</div>
+
+						<div id="image_id">
+							<img id="ajax-loader" class="img-responsive"
+								src="./gif/ajax-loader.gif" style="display: none;">
+						</div>
+					</div>
+					<br>
+
+
+
+					<div id="info_student"
+						class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+					<div id="infor_room"
+						class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+				</section>
+			</div>
+		</div>
+	</div>
+
+	<!-- Button trigger modal -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="modalRoomInfor" tabindex="-1" role="dialog"
+		aria-labelledby="modalRoomInfor" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Thông tin phòng
+						ở</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="modal-body"></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+//            var btn = document.getElementById("search");
+//            btn.addEventListener("click", function () {
+//                $.ajax({
+//                    url: "/tomcat/searchSV",
+//                    type: "get",
+//                    beforeSend: function () {
+//                        $('#image_id').show();
+//                    },
+//                    success: function (data) {
+//                        $('#image_id').hide();
+//                        var row = document.getElementById("info_student");
+//                        row.innerHTML = data;
+//                    },
+//                    error: function (xhr) {
+//                        //Do Something to handle error
+//                    }
+//                });
+//            });
+
+            function searchSVAjax() {
+                var masvSearch = document.getElementById('masv').value;
+                console.log(masvSearch);
+                $.ajax({
+                    url: "/test/searchSV",
+                    type: "get",
+                    data: {
+                        masv: masvSearch
+                    },
+                    beforeSend: function () {
+                        $('#ajax-loader').show();
+                    },
+                    success: function (data) {
+                        $('#ajax-loader').hide();
+                        var row = document.getElementById("info_student");
+                        row.innerHTML = data;
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
+            var input = document.getElementById("masv");
+            input.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    if (input.value == "") {
+                        alert("Vui lòng nhập mã sinh viên!");
+                    } else {
+                        event.preventDefault();
+                        document.getElementById("search").click();
+                    }
+                }
+            });
+            var btn = document.getElementById("search");
+            btn.addEventListener('click', function () {
+                if (input.value == "") {
+                    alert("Vui lòng nhập mã sinh viên!");
+                } else {
+                    searchSVAjax();
+                }
+            })
+        </script>
+	<script>
+        function viewImg() {
+			 const sid = document.getElementById('masv').value;
+			 window.location.href="viewImg?sid="+sid;
+			 
+		}
+        
+        function showRoomDetail() {
+        	var maphongSearch =document.getElementById('room').innerText;
+        	console.log(maphongSearch);
+            $.ajax({
+                url: "/test/viewRoom?roomID="+maphongSearch,
+                type: "get",
+                data: {
+                    maphong: maphongSearch
+                },
+                beforeSend: function () {
+                    
+                },
+                success: function (data) {
+                    var row = document.getElementById("modal-body");
+                    row.innerHTML = data;
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+		}
+       
+        </script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

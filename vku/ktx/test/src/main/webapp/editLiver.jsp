@@ -1,0 +1,301 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="java.sql.*"%>
+<%@ page import="java.io.*"%>
+<%@ page import="DBConnect.DBContext"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<link rel="icon" type="image/x-icon" href="./favicons/favicon.ico">
+<link rel="./faviconsapple-touch-icon" sizes="180x180"
+	href="./favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32"
+	href="./favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16"
+	href="./favicons/favicon-16x16.png">
+<style><%@ include file="/WEB-INF/style.css"%></style>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<style>
+input[type=checkbox], input[type=radio] {
+	/* box-sizing: border-box; */
+	font-size: 5px;
+	margin: 0 10px 0 10px;
+	padding: 0;
+	width: 15px;
+}
+
+.row {
+	margin-top: 10px
+}
+</style>
+<script>
+      $(function () {
+        $("#datepicker").datepicker({
+          dateFormat: "dd/mm/yy",
+        });
+      });
+    </script>
+<title>Trang chủ</title>
+</head>
+<body>
+	<div class="preloading">
+		<img src="gif/pre-loader.gif" alt=""
+			style="width: 80px !important; height: auto;">
+	</div>
+		<!-- nav starts  -->
+
+	<nav class="navbar navbar-expand-lg navbar-light sticky-top"
+		style="background-color: #0F2557;">
+		<a class="navbar-brand" href="index.jsp"><img src="images/vku.png"
+			alt="" width="66px" height="35px"></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarColor03" aria-controls="navbarColor03"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarColor03">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a class="nav-link" href="index.jsp">Trang
+						chủ</a></li>
+				<c:if test="${sessionScope.acc.isUser==1}">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Đăng
+							ký</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="register-live.jsp">Đăng ký ở
+								nội trú</a> <a class="dropdown-item"
+								href="register-infor-student.jsp">Đăng ký thông tin cá nhân</a>
+						</div></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc.isAdmin==3}">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Quản
+							lý</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="quanlySV">Quản lý sinh viên</a> <a
+								class="dropdown-item" href="quanlyPhong">Quản lý phòng</a> <a
+								class="dropdown-item" href="quanlyAcc">Quản lý tài khoản</a>
+						</div></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc.isUser==1}">
+
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Cập
+							nhật thông tin</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="editLiver.jsp">Cập nhật thông
+								tin ở nội trú</a> <a class="dropdown-item" href="editInfor.jsp">Cập
+								nhật thông tin cá nhân</a>
+						</div></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc.isAdmin==3}">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Thông
+							báo</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="">Duyệt đăng ký phòng</a> <a
+								class="dropdown-item" href="">Liên lạc sinh viên, phụ huynh</a>
+							<a class="dropdown-item" href="">Thông báo nộp tiền</a> <a
+								class="dropdown-item" href="">Thông báo hết hạn</a>
+						</div></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc.isAdmin==1}">
+					<li class="nav-item"><a class="nav-link" href="dashboard.jsp">Đến
+							trang quản lý</a></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc.isUser==1}">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Biểu
+							mẫu</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="file1.jsp" target="_blank">Đơn
+								đăng ký ở nội trú</a> <a class="dropdown-item" href="file2.jsp"
+								target="_blank">Hợp đồng</a> <a class="dropdown-item"
+								href="file3.jsp" target="_blank">Quy định</a>
+						</div></li>
+				</c:if>
+
+				<c:if test="${sessionScope.acc!=null}">
+					<li class="nav-item"><a class="nav-link" href="#">Xin chào
+							${sessionScope.acc.username} !</a></li>
+				</c:if>
+			</ul>
+			<c:if test="${sessionScope.acc==null}">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="login"><i
+							class="fa-solid fa-right-to-bracket"></i>Đăng nhập</a></li>
+				</ul>
+			</c:if>
+			<c:if test="${sessionScope.acc!=null}">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="logout"><i
+							class="fa-solid fa-right-to-bracket"></i>Đăng xuất</a></li>
+				</ul>
+			</c:if>
+		</div>
+	</nav>
+	<!-- nav end -->
+
+	<div class="site_content">
+		<div class="container">
+
+			<div class="row">
+				<section class="col-md-12" id="searchDiv">
+					<div class="page_header cfix" id="page_header">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<h3>Tra cứu thông tin sinh viên</h3>
+						</div>
+						<div class="container">
+
+
+							<div class="row">
+								<div class="col">
+									<input class="form-control" name="masv" id="masv"
+										placeholder="Mã sinh viên" autocomplete="off"
+										required="required" autofocus="1" type="text"
+										style="width: 284.5px">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-11 col-sm-4 col-md-4 col-lg-3">
+									<button class="btn btn-primary" id="search">
+										<i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+									</button>
+								</div>
+
+							</div>
+
+						</div>
+
+						<div id="image_id">
+							<img id="ajax-loader" class="img-responsive"
+								src="./gif/ajax-loader.gif" style="display: none;">
+						</div>
+					</div>
+					<br>
+
+
+
+					<div id="info_student"
+						class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+					<div id="infor_room"
+						class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+				</section>
+			</div>
+		</div>
+	</div>
+
+	<!-- Button trigger modal -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="modalRoomInfor" tabindex="-1" role="dialog"
+		aria-labelledby="modalRoomInfor" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Thông tin phòng
+						ở</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="modal-body"></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+//            var btn = document.getElementById("search");
+//            btn.addEventListener("click", function () {
+//                $.ajax({
+//                    url: "/tomcat/searchSV",
+//                    type: "get",
+//                    beforeSend: function () {
+//                        $('#image_id').show();
+//                    },
+//                    success: function (data) {
+//                        $('#image_id').hide();
+//                        var row = document.getElementById("info_student");
+//                        row.innerHTML = data;
+//                    },
+//                    error: function (xhr) {
+//                        //Do Something to handle error
+//                    }
+//                });
+//            });
+
+            function searchSVAjax() {
+                var masvSearch = document.getElementById('masv').value;
+                console.log(masvSearch);
+                $.ajax({
+                    url: "/test/getLiverInfor",
+                    type: "get",
+                    data: {
+                        masv: masvSearch
+                    },
+                    beforeSend: function () {
+                        $('#ajax-loader').show();
+                    },
+                    success: function (data) {
+                        $('#ajax-loader').hide();
+                        var row = document.getElementById("info_student");
+                        row.innerHTML = data;
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
+            var input1 = document.getElementById("masv");
+            var input2 = document.getElementById("cmnd");
+            input1.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    if (input1.value == "") {
+                        alert("Vui lòng nhập đầy đủ thông tin!");
+                    } else {
+                        event.preventDefault();
+                        document.getElementById("search").click();
+                    }
+                }
+            });
+            var btn = document.getElementById("search");
+            btn.addEventListener('click', function () {
+                if (input1.value == "") {
+                    alert("Vui lòng nhập đầy đủ thông tin!");
+                } else {
+                    searchSVAjax();
+                }
+            })
+        </script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

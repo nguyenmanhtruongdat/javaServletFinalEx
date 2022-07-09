@@ -1,0 +1,25 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri = "http://java.sun.com/jsp/jstl/fmt" prefix = "fmt" %>
+    <html>
+   <head>
+      <title>JSTL fmt:setLocale Tag</title>
+   </head>
+
+   <body>
+      <fmt:bundle basename = "truongdat.resources">
+         <fmt:message content = ""/><br/>
+         <fmt:message content = ""/><br/>
+         <fmt:message content = ""/><br/>
+      </fmt:bundle>
+
+      <!-- Change the Locale -->
+      <fmt:setLocale value = "es_ES"/>
+      <fmt:bundle basename = "com.tutorialspoint.Example">
+         <fmt:message content = "count.one"/><br/>
+         <fmt:message content = "count.two"/><br/>
+         <fmt:message content = "count.three"/><br/>
+      </fmt:bundle>
+
+   </body>
+</html>

@@ -1,0 +1,12 @@
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="test.account"><rhs name\="test.account"/></lhs><lhs name\="DBConnect.DBContext"><rhs name\="DBConnect.DBContext"/></lhs><lhs name\="DAO.DAO"><rhs name\="DAO.DAO"/></lhs><lhs name\="java.text.DateFormat"><rhs name\="java.text.SimpleDateFormat"/></lhs><lhs name\="java.text.Format"><rhs name\="java.text.SimpleDateFormat"/></lhs><lhs name\="java.lang.Cloneable"><rhs name\="java.text.SimpleDateFormat"/><rhs name\="java.util.Date"/><rhs name\="javax.servlet.http.Cookie"/></lhs><lhs name\="java.text.SimpleDateFormat"><rhs name\="java.text.SimpleDateFormat"/></lhs><lhs name\="java.util.Date"><rhs name\="java.util.Date"/></lhs><lhs name\="java.io.File"><rhs name\="java.io.File"/></lhs><lhs name\="entity.account"><rhs name\="entity.account"/></lhs><lhs name\="DAO.CipherDecrytp"><rhs name\="DAO.CipherDecrytp"/></lhs><lhs name\="java.lang.CharSequence"><rhs name\="java.lang.String"/></lhs><lhs name\="java.lang.constant.Constable"><rhs name\="java.lang.String"/></lhs><lhs name\="java.lang.constant.ConstantDesc"><rhs name\="java.lang.String"/></lhs><lhs name\="entity.room"><rhs name\="entity.room"/></lhs><lhs name\="entity.detailsRoom"><rhs name\="entity.detailsRoom"/></lhs><lhs name\="java.util.Collection"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="java.lang.Iterable"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="java.util.List"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="Controller.duyetphong"><rhs name\="Controller.duyetphong"/></lhs><lhs name\="javax.servlet.http.Cookie"><rhs name\="javax.servlet.http.Cookie"/></lhs></history>
+content_assist_number_of_computers=17
+content_assist_proposals_background=255,255,255
+content_assist_proposals_foreground=0,0,0
+eclipse.preferences.version=1
+org.eclipse.jdt.internal.ui.navigator.layout=2
+org.eclipse.jdt.internal.ui.navigator.librariesnode=true
+org.eclipse.jdt.ui.formatterprofiles.version=22
+spelling_locale_initialized=true
+typefilter_migrated_2=true
+useAnnotationsPrefPage=true
+useQuickDiffPrefPage=true

@@ -1,0 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<embed
+		src="http://kytucxa.vku.udn.vn/docs/Mau%2001A%20-%20Don%20dang%20ky%20o%20noi%20tru.pdf"
+		background-color="0xFFE6E6E6" first-page-separator="4"
+		style="position: relative !important; top: 41px; min-height: calc(100% - 41px);"
+		javascript="allow" stream_timestamp="90890398213"
+		embed-top-offset="41" width="826" height="1070" full-frame=""
+		pdfviewrecoveryenabled="" pdffreetextenabled="" data-docheight="1066"
+		data-docwidth="826">
+</body>
+</html>

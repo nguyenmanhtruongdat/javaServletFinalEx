@@ -1,0 +1,244 @@
+package DAO;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import entity.*;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import DBConnect.DBContext;
+
+public class DAO {
+
+    PreparedStatement ps;
+
+    public int register(account acc) throws ClassNotFoundException {
+        DBContext db = DBContext.getInstance();
+        int result = 0;
+        Connection connection;
+        PreparedStatement ps;
+        ResultSet rs;
+        String query = "INSERT INTO `account`(`username`, `password`) VALUES (?,?)";
+        try {
+        	Class.forName("com.mysql.cj.jdbc.Driver");
+        	connection=DriverManager.getConnection("jdbc:mysql://node118779-ktxviethan.mircloud.host/hethongktx", "root", "AATcxn43481");
+            ps = connection.prepareStatement(query);
+            ps.setString(1, acc.getUsername());
+            ps.setString(2, acc.getPassword());
+            result = ps.executeUpdate();
+            if (result > 0) {
+                System.out.println("Thanh cong");
+            } else {
+                System.out.println("That bai");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public account login(account acc) throws SQLException {
+        DBContext db = DBContext.getInstance();
+        ResultSet rs;
+        Connection connection;
+        PreparedStatement ps;
+
+        String query = "SELECT * from account where username=? and password =?";
+        try {
+            connection = db.getConnection();
+            ps = connection.prepareStatement(query);
+            ps.setString(1, acc.getUsername());
+            ps.setString(2, acc.getPassword());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new account(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    public int registerInforStudent(student std) throws SQLException {
+        DBContext db = DBContext.getInstance();
+        int result = 0;
+        Connection connection;
+        PreparedStatement ps;
+        String query = "INSERT INTO studentinfor (masv, hoten, ngaysinh, gioitinh, lop, nganh, khoa, truong, CMND, sdtSV, sdtPH, email, diachi, anh) VALUES (?,?,STR_TO_DATE(?,'%d/%m/%Y'),?,?,?,?,?,?,?,?,?,?,?)";
+        try {
+            connection = db.getConnection();
+            ps = connection.prepareStatement(query);
+            ps.setString(1, std.getMasv());
+            System.out.println(std.getMasv());
+            ps.setString(2, std.getTen());
+            ps.setString(3, std.getNgaysinh());
+            ps.setString(4, std.getGioitinh());
+            System.out.println(std.getGioitinh());
+            ps.setString(5, std.getLop());
+            ps.setString(6, std.getNganh());
+            ps.setString(7, std.getKhoa());
+            ps.setString(8, std.getTruong());
+            ps.setString(9, std.getCMND());
+            ps.setString(10, std.getSdtCanhan());
+            ps.setString(11, std.getSdtGiadinh());
+            ps.setString(12, std.getEmail());
+            ps.setString(13, std.getDiachi());
+            ps.setString(14, std.getAnh());
+            ps.executeUpdate();
+            if (result > 0) {
+                System.out.println("Thanh cong");
+            } else {
+                System.out.println("That bai");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public List<student> getAllStudent() {
+        ResultSet rs;
+        DBContext db = DBContext.getInstance();
+        List<student> list = new ArrayList<>();
+        String query = "SELECT * FROM `studentinfor`";
+        Connection connection;
+        PreparedStatement ps;
+        try {
+            connection = db.getConnection();
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new student(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getString(13), rs.getString(14)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+
+    }
+
+    public void deleteStudent(String masv) {
+        DBContext db = DBContext.getInstance();
+        String query = "DELETE FROM studentinfor WHERE masv =?";
+        Connection connection;
+        PreparedStatement ps;
+        try {
+            connection = db.getConnection();
+            ps = connection.prepareStatement(query);
+            ps.setString(1, masv);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public student selectStudentById(String masv) {
+        ResultSet rs;
+        DBContext db = DBContext.getInstance();
+        List<student> list = new ArrayList<>();
+        String query = "SELECT * FROM studentinfor WHERE masv=?";
+        Connection connection;
+        PreparedStatement ps;
+        try {
+            connection = db.getConnection();
+            ps = connection.prepareStatement(query);
+            ps.setString(1, masv);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new student(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getString(13), rs.getString(14));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    public void updateStudent(student std) {
+        DBContext db = DBContext.getInstance();
+        String query = "UPDATE studentinfor SET  hoten  =? ,ngaysinh  = STR_TO_DATE(?,'%d/%m/%Y'), gioitinh  =?  ,lop  =? , nganh  =?, khoa=? ,truong  =? , cmnd  =? , sdtSV  =?,  sdtPH  =? , email  =?,  diachi  =? WHERE  masv =?";
+        Connection connection;
+        PreparedStatement ps;
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/YYYY");
+            System.out.println(std.getNgaysinh());
+            connection = db.getConnection();
+            ps = connection.prepareStatement(query);
+            ps.setString(1, std.getTen());
+            ps.setString(2, std.getNgaysinh());
+            ps.setString(3, std.getGioitinh());
+            ps.setString(4, std.getLop());
+            ps.setString(5, std.getNganh());
+            ps.setString(6, std.getKhoa());
+            ps.setString(7, std.getTruong());
+            ps.setString(8, std.getCMND());
+            ps.setString(9, std.getSdtCanhan());
+            ps.setString(10, std.getSdtGiadinh());
+            ps.setString(11, std.getEmail());
+            ps.setString(12, std.getDiachi());
+            ps.setString(13, std.getAnh());
+            ps.setString(13, std.getMasv());
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void main(String[] args) {
+        DAO dao = new DAO();
+        account acc= new account();
+        acc.setUsername("dat");
+        acc.setPassword("dat");
+        acc.setIsUser(1);
+        acc.setIsAdmin(0);
+        try {
+			int rs =dao.register(acc);
+			if (rs>0) {
+				System.out.println("thanh cong");
+			}else {
+				System.out.println("that bai");
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//        student std = new student();
+//        std.setMasv("21it009");
+//        std.setTen("anh lol");
+//        std.setNgaysinh("21/7/2003");
+//        std.setGioitinh("Nam");
+//        std.setLop("21IT3");
+//        std.setNganh("CNTT");
+//        std.setKhoa("KHMT");
+//        std.setTruong("VKU");
+//        std.setCMND("123123");
+//        std.setSdtCanhan("1241241244");
+//        std.setSdtGiadinh("1241234124");
+//        std.setEmail("DAT@gmail.com");
+//        std.setDiachi("cau tre");
+//        std.setAnh("https://cdn.vku-udn.edu.vn/daotao/sinhvien/21IT057.jpg");
+//        try {
+//            int rs = dao.registerInforStudent(std);
+//            if (rs > 0) {
+//                System.out.println("thanh cong");
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    }
+}

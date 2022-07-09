@@ -1,0 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+    <fmt:setLocale value="vi_VN"/>
+    <fmt:bundle basename="resources.app" var="lang"></fmt:bundle>
+    <h1><fmt:message key=content bundle="${lang}"></fmt:message></h1>
+    <fmt:setLocale value="vi_VN"/>

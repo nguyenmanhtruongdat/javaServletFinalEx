@@ -1,0 +1,11 @@
+package entity;
+
+public class detailsRoom {
+	private String maphong;
+	private String masv;
+	private String hoten;
+	private String ngaysinh;
+	private String sdt;
+	private String email;
+	private String anh;
+}

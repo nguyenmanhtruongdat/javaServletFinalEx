@@ -1,0 +1,348 @@
+package Controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import DAO.DAO;
+import DBConnect.DBContext;
+
+/**
+ * Servlet implementation class getAllInfor
+ */
+@WebServlet("/getAllInfor")
+public class getAllInfor extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    Connection conn;
+    ResultSet rs;
+    ResultSet rs1;
+    Statement stmt;
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        //String masv=msv.getMasv();
+        String masvsearch = request.getParameter("masv");  
+        String emailsearch=request.getParameter("cmnd");
+		String cmndsearch=request.getParameter("email");
+        DBContext db = DBContext.getInstance();
+        try {
+            conn = db.getConnection();
+            
+            response.setContentType("image/jpg");
+            DAO dao = new DAO();
+            stmt = conn.createStatement();
+
+			String sql = "SELECT `masv`, `hoten`, DATE_FORMAT(ngaysinh,'%d/%m/%Y') AS ngaysinh, `gioitinh`, `lop`, `nganh`, `khoa`, `truong`, `CMND`, `sdtSV`, `sdtPH`, `email`, `diachi`, `anh` FROM `studentinfor` WHERE masv='"+masvsearch+"' and CMND ='"+cmndsearch+"' and email='"+emailsearch+"'";
+            rs1=stmt.executeQuery(sql);
+            rs = dao.searchSV(masvsearch);
+            String masv = "";
+            String hoten = "";
+            String anh = "";
+            String ngaysinh = "";
+            String gioitinh = "";
+            String lop = "";
+            String nganh = "";
+            String khoa="";
+            String truong = "";
+            String cmnd="";
+            String sdtSV="";
+            String sdtPH="";
+            String email ="";
+            String diachi="";
+
+            while (rs.next()) {
+                masv = rs.getString("masv");
+                hoten = rs.getString("hoten");
+                ngaysinh = rs.getString("ngaysinh");
+                gioitinh = rs.getString("gioitinh");
+                lop = rs.getString("lop");
+                nganh = rs.getString("nganh");
+                khoa=rs.getString("khoa");
+                truong = rs.getString("truong");
+                cmnd = rs.getString("cmnd");
+                sdtSV= rs.getString("sdtSV");
+                sdtPH=rs.getString("sdtPH");
+                email = rs.getString("email");
+                diachi = rs.getString("diachi");
+                anh = rs.getString("anh");
+            }
+            boolean stt= (masvsearch.trim().toLowerCase().equals(masv.trim().toLowerCase()));
+            if (!stt) {
+                out.print("<div class=\"cc\" id=\"cc\">\n"
+                        + "	<div class=\"col-xs-9 col-sm-9 col-md-10 col-lg-10\" style=\"position:relative;\">\n"
+                        + "		<p style=\"font-weight:normal; line-height:20px\">\n"
+                        + "					<b>Không tìm thấy sinh viên!</b></p>\n"
+                        +"<p>Vui lòng kiểm tra lại mã sinh viên hoặc thực hiện đăng ký thông tin cá nhân <a href=\"register-infor-student.jsp\">Tại đây</a></p>"
+                        + "	</div>\n"
+                        + "</div>");
+            } else if(stt) {
+            	out.print("<div class=\"center\" style=\"margin: 20 auto; width: 100%\">\r\n"
+            			+ "		<form action=\"./execSignup\" method=\"post\"\r\n"
+            			+ "			enctype=\"multipart/form-data\">\r\n"
+            			+ "			<div class=\"container\">\r\n"
+            			+ "				<div class=\"text-center mt-5\">\r\n"
+            			+ "					<h2>Đăng ký thông tin cá nhân</h2>\r\n"
+            			+ "					<hr>\r\n"
+            			+ "				</div>\r\n"
+            			+ "\r\n"
+            			+ "				<div class=\"row\">\r\n"
+            			+ "					<div class=\"col-lg-12 mx-auto\">\r\n"
+            			+ "						<div class=\"card mt-2 mx-auto p-4\" style=\"border: none\">\r\n"
+            			+ "							<div class=\"card-body\">\r\n"
+            			+ "								<div class=\"container\">\r\n"
+            			+ "									<div class=\"controls\">\r\n"
+            			+ "										<h5>I. Thông tin cá nhân</h5>\r\n"
+            			+ "										<hr>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"masv\">Mã sinh viên <span><span>*</span></span>\r\n"
+            			+ "													</label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"text\" readonly name=\"masv\" value=\""+masv+"\" class=\"form-control\"\r\n"
+            			+ "														id=\"masv\" required />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"hoten\">Họ tên <span><span>*</span></span>\r\n"
+            			+ "													</label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"text\" id=\"hoten\" value=\""+hoten+"\" class=\"form-control\"\r\n"
+            			+ "														name=\"hoten\" required />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"img\">Ảnh <span><span>*</span></span>\r\n"
+            			+ "													</label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"file\" id=\"img\" name=\"img\" accept=\"image/*\" />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"ngaysinh\">Ngày sinh <span>*</span>\r\n"
+            			+ "													</label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+"<input type=\"date\" name=\"dob\" placeholder=\"dd-mm-yyyy\" value=\""+ngaysinh+"\" class=\"form-control hasDatepicker\" id=\"datepicker\" onclick=\"\">"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"gioitinh\">Giới tính <span>*</span>\r\n"
+            			+ "													</label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "												<select id=\"gioitinh\" name=\"gioitinh\" class=\"form-control\"\r\n"
+            			+ "														required=\"required\">\r\n"
+            			+ "														<option value=\"\" selected disabled>--Chọn giới\r\n"
+            			+ "															tính--</option>\r\n"
+            			+ "														<option name=\"gioitinh\" value=\"Nam\" class=\"form-control\"\r\n"
+            			+ "															id=\"gioitinh\">Nam</option>\r\n"
+            			+ "														<option name=\"gioitinh\" value=\"Nữ\" class=\"form-control\"\r\n"
+            			+ "															id=\"gioitinh\">Nữ</option>\r\n"
+            			+ "													</select>\r\n"
+            			+ "													<!-- <label for=\"nam\">Nam</label> <input type=\"radio\" name=\"gioitinh\" id=\"nam\" value=\"Nam\" class=\"\">\r\n"
+            			+ "													<label for=\"nu\">Nữ</label> <input type=\"radio\" name=\"gioitinh\" id=\"nu\" value=\"Nữ\" class=\"\"> -->\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<h5>II. Thông tin trường học</h5>\r\n"
+            			+ "										<hr>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"lop\">Lớp <span>*</span></label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"text\" name=\"lop\" id=\"lop\" value=\""+lop+"\" class=\"form-control\"\r\n"
+            			+ "														required=\"required\" />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"nganh\">Ngành <span>*</span></label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"text\" name=\"nganh\" value=\""+nganh+"\" class=\"form-control\"\r\n"
+            			+ "														id=\"nganh\" required=\"required\" />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"khoa\">Khoa <span>*</span></label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"text\" name=\"khoa\" value=\""+khoa+"\" class=\"form-control\"\r\n"
+            			+ "														id=\"khoa\" required=\"required\" />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<h5>III. Thông tin liên hệ</h5>\r\n"
+            			+ "										<hr>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"cmnd\">CMND/CCCD <span>*</span></label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"text\" name=\"cmnd\" value=\""+cmnd+"\" class=\"form-control\"\r\n"
+            			+ "														id=\"cmnd\" required=\"required\" />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"truong\">Trường <span>*</span></label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"text\" name=\"truong\" value=\""+truong+"\" class=\"form-control\"\r\n"
+            			+ "														id=\"truong\" required=\"required\" />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"sdt\">Số điện thoại cá nhân <span>*</span>\r\n"
+            			+ "													</label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"text\" name=\"sdtSV\" value=\""+sdtSV+"\" class=\"form-control\"\r\n"
+            			+ "														id=\"sdt\" required=\"required\" />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"sdt\">Số điện thoại gia đình <span>*</span>\r\n"
+            			+ "													</label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"text\" name=\"sdtPH\" value=\""+sdtPH+"\" class=\"form-control\"\r\n"
+            			+ "														id=\"sdt\" required=\"required\" />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"email\">Email <span>*</span></label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"email\" name=\"email\" value=\""+email+"\" class=\"form-control\"\r\n"
+            			+ "														id=\"email\" required=\"required\" />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<label for=\"diachi\">Địa chỉ <span>*</span></label>\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<div class=\"form-group\">\r\n"
+            			+ "													<input type=\"text\" name=\"diachi\" value=\""+diachi+"\" class=\"form-control\"\r\n"
+            			+ "														id=\"diachi\" required=\"required\" />\r\n"
+            			+ "												</div>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "										<h5>Xác nhận cập nhật</h5>\r\n"
+            			+ "										<hr>\r\n"
+            			+ "										<div class=\"row\">\r\n"
+            			+ "											<div class=\"col-md-2\"></div>\r\n"
+            			+ "											<div class=\"col-md-10\">\r\n"
+            			+ "												<button type=\"submit\" class=\"btn btn-success\">\r\n"
+            			+ "													<i class=\"fa-solid fa-circle-check\"></i>Cập nhật\r\n"
+            			+ "												</button>\r\n"
+            			+ "												<button type=\"reset\" class=\"btn btn-default\">\r\n"
+            			+ "													<i class=\"fa-solid fa-rotate-right\"></i> Viết lại\r\n"
+            			+ "												</button>\r\n"
+            			+ "											</div>\r\n"
+            			+ "										</div>\r\n"
+            			+ "									</div>\r\n"
+            			+ "								</div>\r\n"
+            			+ "							</div>\r\n"
+            			+ "						</div>\r\n"
+            			+ "						<!-- /.8 -->\r\n"
+            			+ "					</div>\r\n"
+            			+ "					<!-- /.row-->\r\n"
+            			+ "				</div>\r\n"
+            			+ "			</div>\r\n"
+            			+ "		</form>\r\n"
+            			+ "	</div>");
+            }
+        }catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}
